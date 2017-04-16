@@ -1,5 +1,6 @@
 package com.woodensoftwaredevelopment.smsretriever;
 
+import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,10 +19,25 @@ public class MainActivity extends AppCompatActivity {
     private boolean isEmpty(EditText etText) {
         return etText.getText().toString().trim().length() == 0;
     }
+    /*
+    * "android.permission.RECEIVE_SMS"></uses-permission>
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
+    * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(this.checkSelfPermission("android.permission.RECEIVE_SMS") != PackageManager.PERMISSION_GRANTED
+            || this.checkSelfPermission("android.permission.READ_SMS") != PackageManager.PERMISSION_GRANTED
+                || this.checkSelfPermission("android.permission.SEND_SMS") != PackageManager.PERMISSION_GRANTED)
+        {
+            this.requestPermissions(new String[]{
+                    "android.permission.RECEIVE_SMS",
+                    "android.permission.READ_SMS",
+                    "android.permission.SEND_SMS"
+            },200);
+        }
         final LinearLayout ll = (LinearLayout) this.findViewById(R.id.llTable);
         final Button btnSearch = (Button) this.findViewById(R.id.btnSearch);
         final EditText etDate = (EditText) this.findViewById(R.id.etDate);
